@@ -4,7 +4,7 @@ import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet , CommonModule],
+  imports: [RouterOutlet , CommonModule,],
   template: `
   <div class="container" style="font-size:40px">
   <span class="title" >Memory game</span>
@@ -28,4 +28,17 @@ import { CommonModule } from '@angular/common';
 })
 export class App {
   protected title = 'angular-memory-game';
+  products: Product[] = [
+    {id: 1, name: '✔️'},
+    {id: 2, name: '✖️'},
+    {id: 3, name: '➗'},
+    {id: 4, name: '➕'},
+    {id: 5, name: '➖'},
+    {id: 6, name: '🟰'},
+  ]
+
+}
+type Product = {
+    id: number;
+    name: string;
 }
