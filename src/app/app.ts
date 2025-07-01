@@ -6,7 +6,7 @@ import { RouterOutlet } from '@angular/router';
   imports: [RouterOutlet],
   template: `
     <h1>Welcome to {{title}}!</h1>
-
+    <h2>Memory Game</h2>
     <router-outlet />
   `,
   styles: [],
