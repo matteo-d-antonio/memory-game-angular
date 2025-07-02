@@ -13,8 +13,13 @@ import { CommonModule } from '@angular/common';
     </div>
 
     <div class="card-container">
-      <li *ngFor="let card of cards()" class="ms-card-item">
-        {{ card.name }}
+      <li *ngFor="let card of cards()" class="ms-card-item" (click)="flipCard(card)">
+        <span *ngIf="card.flipped || card.matched; else hiddenCard">
+          {{ card.name }}
+        </span>
+        <ng-template #hiddenCard>
+          ❔
+        </ng-template>
       </li>
     </div>
   </div>
@@ -58,12 +63,14 @@ import { CommonModule } from '@angular/common';
 export class App {
   protected title = 'angular-memory-game';
   products: Product[] = [
-    {id: 1, name: '🐷'},
-    {id: 2, name: '🐮'},
-    {id: 3, name: '🐔'},
-    {id: 4, name: '🐰'},
-    {id: 5, name: '🐸'},
-    {id: 6, name: '🐵'},
+    {id: 1, name: '🐷', flipped: false, matched: false},
+    {id: 2, name: '🐮', flipped: false, matched: false},
+    {id: 3, name: '🐔', flipped: false, matched: false},
+    {id: 4, name: '🐰', flipped: false, matched: false},
+    {id: 5, name: '🐸', flipped: false, matched: false},
+    {id: 6, name: '🐵', flipped: false, matched: false},
+    {id: 7, name: '🐶', flipped: false, matched: false},
+    {id: 8, name: '🐱', flipped: false, matched: false}
   ]
 
   cards = signal<Product[]>([]);
@@ -72,13 +79,49 @@ export class App {
   shuffleCards() {
     const duplicated = [...this.products, ...this.products];
     const shuffled = duplicated
-    .map((card, index) => ({ ...card, id: index })) // assegna id unici
+    .map((card, index) => ({ ...card, id: index }))
     .sort(() => Math.random() - 0.5);
     this.cards.set(shuffled);
   }
 
+  flippedCards: Product[] = [];
+
+  flipCard(card: Product) {
+    if (card.flipped || card.matched || this.flippedCards.length === 2) {
+      return;
+    }
+
+    card.flipped = true;
+    this.flippedCards.push(card);
+    this.cards.set([...this.cards()]);
+
+    if (this.flippedCards.length === 2) {
+      const [first, second] = this.flippedCards;
+
+      if (first.name === second.name) {
+        first.matched = second.matched = true;
+        this.flippedCards = [];
+
+        const allMatched = this.cards().every(card => card.matched);
+        if (allMatched) {
+          setTimeout(() => {
+            alert('🎉 Hai trovato tutte le coppie!');
+          }, 100);
+       }
+      } else {
+        setTimeout(() => {
+          first.flipped = second.flipped = false;
+          this.flippedCards = [];
+          this.cards.set([...this.cards()]);
+        }, 700);
+      }
+    }
+  }
 }
+
 type Product = {
     id: number;
     name: string;
+    flipped: boolean;
+    matched: boolean;
 }
