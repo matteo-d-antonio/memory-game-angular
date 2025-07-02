@@ -9,7 +9,7 @@ import { CommonModule } from '@angular/common';
   <div>
     <div class="container" style="font-size:40px">
       <span class="title" >Memory game</span>
-      <span><button class="btn btn-outline-danger" (click)="shuffleCards()">RESET</button></span>
+      <span><button class="btn btn-outline-danger" (click)="shuffleCards()">NUOVA PARTITA</button></span>
     </div>
 
     <div class="card-container">
